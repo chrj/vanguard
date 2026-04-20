@@ -10,6 +10,7 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-go@v6
@@ -20,6 +21,7 @@ jobs:
   lint:
     name: Lint
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-go@v6
@@ -48,3 +50,44 @@ jobs:
         run: go vet ./...
 
       - uses: golangci/golangci-lint-action@v9
+
+  security:
+    name: "Security Audit"
+    runs-on: latest-ubuntu
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Run Semgrep
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: >-
+            p/golang
+            p/security-audit
+          generateSarif: "1"
+
+      - name: Get changed Go packages
+        id: changed-packages
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            git fetch origin "+refs/heads/${{ github.base_ref }}:refs/remotes/origin/${{ github.base_ref }}"
+            BASE="origin/${{ github.base_ref }}"
+          else
+            BASE="HEAD~1"
+          fi
+          PKGS=$(git diff --name-only "${BASE}...HEAD" | grep '\.go$' | xargs -r -I{} dirname {} | sort -u | sed 's|^|./|' | tr '\n' ' ')
+          echo "packages=${PKGS}" >> "$GITHUB_OUTPUT"
+
+      - name: Run gosec on changed packages
+        if: steps.changed-packages.outputs.packages != ''
+        run: |
+          go install github.com/securego/gosec/v2/cmd/gosec@latest
+          gosec -exclude-generated ${{ steps.changed-packages.outputs.packages }}
