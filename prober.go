@@ -16,26 +16,25 @@ import (
 	"time"
 )
 
-type Dialer func(ctx context.Context, network, address string) (net.Conn, error)
-
 type Prober struct {
 	cfg    *Config
-	dial   Dialer
+	dialer *net.Dialer
 	client *http.Client
 	m      *Metrics
 }
 
-func NewProber(cfg *Config, dial Dialer, m *Metrics) *Prober {
+func NewProber(cfg *Config, m *Metrics) *Prober {
+	dialer := &net.Dialer{}
 	transport := &http.Transport{
-		DialContext:           dial,
+		DialContext:           dialer.DialContext,
 		TLSHandshakeTimeout:   cfg.Probe.Timeout.D(),
 		ResponseHeaderTimeout: cfg.Probe.Timeout.D(),
 		DisableKeepAlives:     true,
 		ForceAttemptHTTP2:     false,
 	}
 	return &Prober{
-		cfg:  cfg,
-		dial: dial,
+		cfg:    cfg,
+		dialer: dialer,
 		client: &http.Client{
 			Transport: transport,
 			CheckRedirect: func(req *http.Request, via []*http.Request) error {
@@ -160,7 +159,7 @@ func (p *Prober) probeTCP(parent context.Context, t TCPTarget) {
 	p.m.ProbeLastRun.WithLabelValues(t.Name, kind).SetToCurrentTime()
 
 	start := time.Now()
-	conn, err := p.dial(ctx, "tcp", endpoint)
+	conn, err := p.dialer.DialContext(ctx, "tcp", endpoint)
 	if err != nil {
 		p.m.TCPUp.WithLabelValues(t.Name, endpoint, kind).Set(0)
 		p.m.ProbeErrors.WithLabelValues(t.Name, kind).Inc()

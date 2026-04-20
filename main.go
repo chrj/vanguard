@@ -41,7 +41,7 @@ func main() {
 	)
 	m := NewMetrics(reg)
 
-	prober := NewProber(cfg, dev.DialContext, m)
+	prober := NewProber(cfg, m)
 
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer cancel()
