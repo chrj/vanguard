@@ -1,0 +1,56 @@
+# vanguard example configuration
+
+[wireguard]
+# Base64 private key for this client.
+private_key = "CLIENT_PRIVATE_KEY_BASE64"
+# Base64 public key of the server we connect to.
+server_public_key = "SERVER_PUBLIC_KEY_BASE64"
+# Public UDP endpoint of the WireGuard server.
+server_endpoint = "vpn.example.com:51820"
+# IPv4 address assigned to this client on the VPN.
+address = "10.42.0.2"
+# Optional DNS servers reachable over the tunnel.
+dns = ["10.42.0.1"]
+persistent_keepalive_interval = 25
+
+[metrics]
+# Listen address on the VPN interface. Leave host empty to bind to [wireguard].address.
+listen = ":9090"
+path = "/metrics"
+
+[probe]
+# How often to probe every target.
+interval = "30s"
+# Default per-target timeout if the target doesn't override it.
+timeout = "10s"
+
+[[website]]
+name = "main"
+url = "https://example.com/"
+phrases = ["Welcome", "Powered by"]
+timeout = "15s"
+
+[[website]]
+name = "api"
+url = "https://api.example.com/health"
+phrases = ["ok"]
+
+[[tcp_service]]
+name = "ssh-main"
+host = "10.42.0.1"
+port = 22
+type = "ssh"
+
+[[tcp_service]]
+name = "smtp-main"
+host = "10.42.0.1"
+port = 25
+type = "smtp_starttls"
+server_name = "mail.example.com"
+timeout = "15s"
+
+[[tcp_service]]
+name = "imap-plain"
+host = "10.42.0.1"
+port = 993
+type = "tcp"
