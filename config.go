@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/netip"
 	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/BurntSushi/toml"
@@ -67,7 +68,7 @@ func (d *Duration) UnmarshalText(text []byte) error {
 func (d Duration) D() time.Duration { return time.Duration(d) }
 
 func LoadConfig(path string) (*Config, error) {
-	data, err := os.ReadFile(path)
+	data, err := os.ReadFile(filepath.Clean(path)) // #nosec G304 -- path is an operator-supplied CLI flag
 	if err != nil {
 		return nil, err
 	}
