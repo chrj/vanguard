@@ -53,7 +53,7 @@ jobs:
 
   security:
     name: "Security Audit"
-    runs-on: latest-ubuntu
+    runs-on: ubuntu-latest
     timeout-minutes: 15
 
     steps:
