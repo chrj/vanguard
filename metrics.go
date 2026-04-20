@@ -3,11 +3,15 @@ package main
 import "github.com/prometheus/client_golang/prometheus"
 
 type Metrics struct {
-	HTTPUp           *prometheus.GaugeVec
-	HTTPStatus       *prometheus.GaugeVec
-	HTTPDuration     *prometheus.GaugeVec
-	HTTPPhrase       *prometheus.GaugeVec
-	HTTPContentBytes *prometheus.GaugeVec
+	HTTPUp              *prometheus.GaugeVec
+	HTTPStatus          *prometheus.GaugeVec
+	HTTPDuration        *prometheus.GaugeVec
+	HTTPDNSDuration     *prometheus.GaugeVec
+	HTTPConnectDuration *prometheus.GaugeVec
+	HTTPTLSDuration     *prometheus.GaugeVec
+	HTTPTTFBDuration    *prometheus.GaugeVec
+	HTTPPhrase          *prometheus.GaugeVec
+	HTTPContentBytes    *prometheus.GaugeVec
 
 	TCPUp       *prometheus.GaugeVec
 	TCPDuration *prometheus.GaugeVec
@@ -38,6 +42,22 @@ func NewMetrics(reg prometheus.Registerer) *Metrics {
 		HTTPDuration: prometheus.NewGaugeVec(prometheus.GaugeOpts{
 			Name: "vanguard_http_duration_seconds",
 			Help: "Total duration of the HTTP probe in seconds.",
+		}, []string{"target", "url"}),
+		HTTPDNSDuration: prometheus.NewGaugeVec(prometheus.GaugeOpts{
+			Name: "vanguard_http_dns_duration_seconds",
+			Help: "DNS resolution time in seconds.",
+		}, []string{"target", "url"}),
+		HTTPConnectDuration: prometheus.NewGaugeVec(prometheus.GaugeOpts{
+			Name: "vanguard_http_connect_duration_seconds",
+			Help: "Time spent establishing the TCP connection in seconds.",
+		}, []string{"target", "url"}),
+		HTTPTLSDuration: prometheus.NewGaugeVec(prometheus.GaugeOpts{
+			Name: "vanguard_http_tls_duration_seconds",
+			Help: "TLS handshake duration in seconds (0 for plain HTTP).",
+		}, []string{"target", "url"}),
+		HTTPTTFBDuration: prometheus.NewGaugeVec(prometheus.GaugeOpts{
+			Name: "vanguard_http_ttfb_seconds",
+			Help: "Time to first response byte in seconds, measured from probe start.",
 		}, []string{"target", "url"}),
 		HTTPPhrase: prometheus.NewGaugeVec(prometheus.GaugeOpts{
 			Name: "vanguard_http_phrase_found",
@@ -94,7 +114,7 @@ func NewMetrics(reg prometheus.Registerer) *Metrics {
 		}, []string{"target", "kind"}),
 	}
 	reg.MustRegister(
-		m.HTTPUp, m.HTTPStatus, m.HTTPDuration, m.HTTPPhrase, m.HTTPContentBytes,
+		m.HTTPUp, m.HTTPStatus, m.HTTPDuration, m.HTTPDNSDuration, m.HTTPConnectDuration, m.HTTPTLSDuration, m.HTTPTTFBDuration, m.HTTPPhrase, m.HTTPContentBytes,
 		m.TCPUp, m.TCPDuration,
 		m.SSHUp, m.SSHVersion,
 		m.SMTPUp,

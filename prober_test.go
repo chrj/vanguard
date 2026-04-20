@@ -61,6 +61,12 @@ func TestProbeHTTP_Success(t *testing.T) {
 	if got := testutil.ToFloat64(p.m.HTTPContentBytes.WithLabelValues("t1", srv.URL)); got != 20 {
 		t.Errorf("HTTPContentBytes = %v, want 20", got)
 	}
+	if got := testutil.ToFloat64(p.m.HTTPConnectDuration.WithLabelValues("t1", srv.URL)); got <= 0 {
+		t.Errorf("HTTPConnectDuration = %v, want > 0", got)
+	}
+	if got := testutil.ToFloat64(p.m.HTTPTTFBDuration.WithLabelValues("t1", srv.URL)); got <= 0 {
+		t.Errorf("HTTPTTFBDuration = %v, want > 0", got)
+	}
 }
 
 func TestProbeHTTP_PhraseMissing(t *testing.T) {
