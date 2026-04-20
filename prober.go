@@ -249,7 +249,7 @@ func (p *Prober) probeSMTP(t TCPTarget, endpoint string, conn net.Conn) {
 		return
 	}
 
-	tlsCfg := &tls.Config{ServerName: serverName}
+	tlsCfg := &tls.Config{ServerName: serverName, MinVersion: tls.VersionTLS12}
 	if err := c.StartTLS(tlsCfg); err != nil {
 		p.m.SMTPUp.WithLabelValues(t.Name, endpoint).Set(0)
 		p.m.ProbeErrors.WithLabelValues(t.Name, "smtp_starttls").Inc()
