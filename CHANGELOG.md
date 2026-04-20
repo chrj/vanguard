@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.1](https://github.com/chrj/vanguard/compare/v0.1.0...v0.1.1) (2026-04-20)
+
+
+### Other
+
+* Add LICENSE, README.md. ([#6](https://github.com/chrj/vanguard/issues/6)) ([7b1d5ee](https://github.com/chrj/vanguard/commit/7b1d5ee6cce323d8bf4f969c80096d89e70a5e42))
+* Add security scans. ([#8](https://github.com/chrj/vanguard/issues/8)) ([0e1c55a](https://github.com/chrj/vanguard/commit/0e1c55abf79d8854ed4c8918dbaa5afb6b06c07e))
+
 ## [0.1.0](https://github.com/chrj/vanguard/compare/v0.0.1...v0.1.0) (2026-04-20)
 
 
