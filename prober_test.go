@@ -117,7 +117,7 @@ func TestProbeTCP_Success(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer ln.Close()
+	defer func() { _ = ln.Close() }()
 	go func() {
 		for {
 			c, err := ln.Accept()
@@ -157,13 +157,13 @@ func TestProbeSSH_Banner(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer ln.Close()
+	defer func() { _ = ln.Close() }()
 	go func() {
 		c, err := ln.Accept()
 		if err != nil {
 			return
 		}
-		defer c.Close()
+		defer func() { _ = c.Close() }()
 		_, _ = c.Write([]byte("SSH-2.0-OpenSSH_9.3\r\n"))
 	}()
 
@@ -186,13 +186,13 @@ func TestProbeSSH_BadBanner(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer ln.Close()
+	defer func() { _ = ln.Close() }()
 	go func() {
 		c, err := ln.Accept()
 		if err != nil {
 			return
 		}
-		defer c.Close()
+		defer func() { _ = c.Close() }()
 		_, _ = c.Write([]byte("HTTP/1.1 400 Bad Request\r\n"))
 	}()
 

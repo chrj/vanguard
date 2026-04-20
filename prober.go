@@ -98,7 +98,7 @@ func (p *Prober) probeHTTP(parent context.Context, t WebsiteTarget) {
 		p.httpFail(t, err)
 		return
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	body, err := io.ReadAll(io.LimitReader(resp.Body, 2*1024*1024))
 	if err != nil {
@@ -165,7 +165,7 @@ func (p *Prober) probeTCP(parent context.Context, t TCPTarget) {
 		p.m.ProbeErrors.WithLabelValues(t.Name, kind).Inc()
 		return
 	}
-	defer conn.Close()
+	defer func() { _ = conn.Close() }()
 
 	p.m.TCPDuration.WithLabelValues(t.Name, endpoint, kind).Set(time.Since(start).Seconds())
 	p.m.TCPUp.WithLabelValues(t.Name, endpoint, kind).Set(1)
@@ -205,7 +205,7 @@ func (p *Prober) probeSMTP(t TCPTarget, endpoint string, conn net.Conn) {
 		p.m.ProbeErrors.WithLabelValues(t.Name, "smtp_starttls").Inc()
 		return
 	}
-	defer c.Close()
+	defer func() { _ = c.Close() }()
 
 	if err := c.Hello("vanguard.local"); err != nil {
 		p.m.SMTPUp.WithLabelValues(t.Name, endpoint).Set(0)
