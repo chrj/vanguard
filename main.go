@@ -32,7 +32,7 @@ func main() {
 		slog.Error("wireguard", "err", err)
 		os.Exit(1)
 	}
-	defer dev.Close()
+	defer func() { _ = dev.Close() }()
 
 	reg := prometheus.NewRegistry()
 	reg.MustRegister(

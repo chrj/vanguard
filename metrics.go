@@ -17,9 +17,9 @@ type Metrics struct {
 
 	SMTPUp *prometheus.GaugeVec
 
-	CertNotAfter     *prometheus.GaugeVec
-	CertNotBefore    *prometheus.GaugeVec
-	CertExpirySecs   *prometheus.GaugeVec
+	CertNotAfter   *prometheus.GaugeVec
+	CertNotBefore  *prometheus.GaugeVec
+	CertExpirySecs *prometheus.GaugeVec
 
 	ProbeLastRun *prometheus.GaugeVec
 	ProbeErrors  *prometheus.CounterVec
