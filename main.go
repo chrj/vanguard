@@ -10,6 +10,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"github.com/chrj/wgnet"
 	"github.com/prometheus/client_golang/prometheus"
@@ -83,7 +84,10 @@ func serve(ctx context.Context, cfg *Config, dev *wgnet.Device, reg *prometheus.
 		_, _ = w.Write([]byte("ok\n"))
 	})
 
-	srv := &http.Server{Handler: mux}
+	srv := &http.Server{
+		Handler:           mux,
+		ReadHeaderTimeout: 10 * time.Second,
+	}
 
 	tcpAddr, err := net.ResolveTCPAddr("tcp", resolveListen(cfg))
 	if err != nil {
