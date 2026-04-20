@@ -10,6 +10,7 @@ import (
 	"log/slog"
 	"net"
 	"net/http"
+	"net/http/httptrace"
 	"net/smtp"
 	"net/url"
 	"strings"
@@ -86,7 +87,38 @@ func (p *Prober) probeHTTP(parent context.Context, t WebsiteTarget) {
 	p.m.ProbeLastRun.WithLabelValues(t.Name, "http").SetToCurrentTime()
 
 	start := time.Now()
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, t.URL, nil)
+	var dnsStart, connectStart, tlsStart time.Time
+	var dnsDur, connectDur, tlsDur, ttfb time.Duration
+	trace := &httptrace.ClientTrace{
+		DNSStart: func(_ httptrace.DNSStartInfo) {
+			dnsStart = time.Now()
+		},
+		DNSDone: func(info httptrace.DNSDoneInfo) {
+			if info.Err == nil {
+				dnsDur = time.Since(dnsStart)
+			}
+		},
+		ConnectStart: func(_, _ string) {
+			connectStart = time.Now()
+		},
+		ConnectDone: func(_, _ string, err error) {
+			if err == nil {
+				connectDur = time.Since(connectStart)
+			}
+		},
+		TLSHandshakeStart: func() {
+			tlsStart = time.Now()
+		},
+		TLSHandshakeDone: func(_ tls.ConnectionState, err error) {
+			if err == nil {
+				tlsDur = time.Since(tlsStart)
+			}
+		},
+		GotFirstResponseByte: func() {
+			ttfb = time.Since(start)
+		},
+	}
+	req, err := http.NewRequestWithContext(httptrace.WithClientTrace(ctx, trace), http.MethodGet, t.URL, nil)
 	if err != nil {
 		p.httpFail(t, err)
 		return
@@ -107,6 +139,10 @@ func (p *Prober) probeHTTP(parent context.Context, t WebsiteTarget) {
 	}
 
 	p.m.HTTPDuration.WithLabelValues(t.Name, t.URL).Set(time.Since(start).Seconds())
+	p.m.HTTPDNSDuration.WithLabelValues(t.Name, t.URL).Set(dnsDur.Seconds())
+	p.m.HTTPConnectDuration.WithLabelValues(t.Name, t.URL).Set(connectDur.Seconds())
+	p.m.HTTPTLSDuration.WithLabelValues(t.Name, t.URL).Set(tlsDur.Seconds())
+	p.m.HTTPTTFBDuration.WithLabelValues(t.Name, t.URL).Set(ttfb.Seconds())
 	p.m.HTTPStatus.WithLabelValues(t.Name, t.URL).Set(float64(resp.StatusCode))
 	p.m.HTTPContentBytes.WithLabelValues(t.Name, t.URL).Set(float64(len(body)))
 
