@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/chrj/vanguard/compare/v0.1.1...v0.1.2) (2026-04-20)
+
+
+### Bug Fixes
+
+* Use TLS 1.2 as a minimum. ([#9](https://github.com/chrj/vanguard/issues/9)) ([f2d56df](https://github.com/chrj/vanguard/commit/f2d56df73bffeb24dd9affc97a2e7a28fda942df))
+
 ## [0.1.1](https://github.com/chrj/vanguard/compare/v0.1.0...v0.1.1) (2026-04-20)
 
 
