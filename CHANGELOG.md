@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.3](https://github.com/chrj/vanguard/compare/v0.1.2...v0.1.3) (2026-05-09)
+
+
+### Other
+
+* pin Go toolchain to 1.26.3 ([#11](https://github.com/chrj/vanguard/issues/11)) ([af6291c](https://github.com/chrj/vanguard/commit/af6291c2a1bae04607e0aeda679b608cabbca0a6))
+
 ## [0.1.2](https://github.com/chrj/vanguard/compare/v0.1.1...v0.1.2) (2026-04-20)
 
 
