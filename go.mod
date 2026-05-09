@@ -2,6 +2,8 @@ module github.com/chrj/vanguard
 
 go 1.26
 
+toolchain go1.26.3
+
 require (
 	github.com/BurntSushi/toml v1.4.1-0.20240526193622-a339e1f7089c
 	github.com/chrj/wgnet v0.1.0
