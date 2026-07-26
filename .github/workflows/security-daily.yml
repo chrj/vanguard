@@ -17,10 +17,10 @@ jobs:
     timeout-minutes: 15
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Set up Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version-file: go.mod
 
@@ -35,15 +35,29 @@ jobs:
     timeout-minutes: 15
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.x"
+
+      - name: Install Semgrep
+        run: pip install semgrep
 
       - name: Run Semgrep
-        uses: returntocorp/semgrep-action@v1
+        run: |
+          semgrep scan \
+            --config p/golang \
+            --config p/security-audit \
+            --error \
+            --sarif --output semgrep.sarif
+
+      - name: Upload SARIF
+        if: always() && hashFiles('semgrep.sarif') != ''
+        uses: github/codeql-action/upload-sarif@v3
         with:
-          config: >-
-            p/golang
-            p/security-audit
-          generateSarif: "1"
+          sarif_file: semgrep.sarif
 
   gosec:
     name: "gosec: Full Scan"
@@ -51,10 +65,10 @@ jobs:
     timeout-minutes: 15
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Set up Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version-file: go.mod
 
