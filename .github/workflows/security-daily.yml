@@ -40,10 +40,11 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
-          python-version: "3.x"
+          python-version: "3.13"
 
+      # Keep the pinned version in sync with .github/workflows/ci.yml.
       - name: Install Semgrep
-        run: pip install semgrep
+        run: python -m pip install semgrep==1.171.0
 
       - name: Run Semgrep
         run: |
