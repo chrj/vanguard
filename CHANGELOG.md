@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.1.3](https://github.com/chrj/vanguard/compare/v0.1.2...v0.1.3) (2026-08-04)
+
+
+### Bug Fixes
+
+* **deps:** bump the go-deps group with 2 updates ([#16](https://github.com/chrj/vanguard/issues/16)) ([7c6f125](https://github.com/chrj/vanguard/commit/7c6f1253bca7bed0f64fb7a7877c3a016a8e19a6))
+* **deps:** bump x/crypto, x/net and Go toolchain for security advisories ([#13](https://github.com/chrj/vanguard/issues/13)) ([a91d0e7](https://github.com/chrj/vanguard/commit/a91d0e79a3252eba4085530f722ec47763cd87f5))
+
+
+### Other
+
+* pin Go toolchain to 1.26.3 ([#11](https://github.com/chrj/vanguard/issues/11)) ([af6291c](https://github.com/chrj/vanguard/commit/af6291c2a1bae04607e0aeda679b608cabbca0a6))
+
 ## [0.1.2](https://github.com/chrj/vanguard/compare/v0.1.1...v0.1.2) (2026-04-20)
 
 
