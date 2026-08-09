@@ -6,7 +6,7 @@ toolchain go1.26.5
 
 require (
 	github.com/BurntSushi/toml v1.6.0
-	github.com/chrj/wgnet v0.1.2
+	github.com/chrj/wgnet v0.1.3
 	github.com/prometheus/client_golang v1.24.1
 )
 
