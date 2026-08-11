@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.4](https://github.com/chrj/vanguard/compare/v0.1.3...v0.1.4) (2026-08-11)
+
+
+### Bug Fixes
+
+* **deps:** bump github.com/chrj/wgnet in the go-deps group ([#18](https://github.com/chrj/vanguard/issues/18)) ([415e6a7](https://github.com/chrj/vanguard/commit/415e6a7ef8d6e700d4f1e91dbbdd1a38ace85e21))
+
 ## [0.1.3](https://github.com/chrj/vanguard/compare/v0.1.2...v0.1.3) (2026-08-04)
 
 
