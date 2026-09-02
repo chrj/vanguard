@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.5](https://github.com/chrj/vanguard/compare/v0.1.4...v0.1.5) (2026-09-02)
+
+
+### Bug Fixes
+
+* **deps:** bump github.com/chrj/wgnet in the go-deps group ([#24](https://github.com/chrj/vanguard/issues/24)) ([0087967](https://github.com/chrj/vanguard/commit/0087967551a6e9a2f15a87a3307290fb15670bd7))
+
+
+### Other
+
+* **deps:** bump Go toolchain to 1.26.6 ([#21](https://github.com/chrj/vanguard/issues/21)) ([0342c6a](https://github.com/chrj/vanguard/commit/0342c6a8d159917758d9c6e2afc22d52fce418df))
+
 ## [0.1.4](https://github.com/chrj/vanguard/compare/v0.1.3...v0.1.4) (2026-08-11)
 
 
