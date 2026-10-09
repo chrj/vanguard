@@ -2,7 +2,7 @@ module github.com/chrj/vanguard
 
 go 1.26.0
 
-toolchain go1.26.6
+toolchain go1.27.2
 
 require (
 	github.com/BurntSushi/toml v1.6.0
