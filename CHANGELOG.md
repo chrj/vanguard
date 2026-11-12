@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.7](https://github.com/chrj/vanguard/compare/v0.1.6...v0.1.7) (2026-11-12)
+
+
+### Bug Fixes
+
+* build with Go 1.27.4 for GO-2026-6859 ([#38](https://github.com/chrj/vanguard/issues/38)) ([c7fba31](https://github.com/chrj/vanguard/commit/c7fba317668fa6566c17a81ffa8def5f5ce5b4f2))
+
 ## [0.1.6](https://github.com/chrj/vanguard/compare/v0.1.5...v0.1.6) (2026-10-25)
 
 
